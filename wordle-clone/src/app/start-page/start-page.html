@@ -1,0 +1,36 @@
+<h1>Settings</h1>
+<form [formGroup]="settingsForm" (ngSubmit)="onSubmit()" class="space-y-4 p-4">
+  <div>
+    <label for="volume">Game Volume: {{ settingsForm.value.volume }}</label>
+    <input 
+      id="volume"
+      type="range" 
+      formControlName="volume" 
+      min="0" 
+      max="100"
+    />
+  </div>
+
+  <div>
+    <label for="darkMode">Light/Dark Mode:</label>
+    <input 
+      id="darkMode"
+      type="checkbox" 
+      formControlName="darkMode"
+    />
+    <span>{{ settingsForm.value.darkMode ? 'Dark' : 'Light' }}</span>
+  </div>
+
+  <div>
+    <label for="lettersPerWord">Letters per word:</label>
+    <input 
+      id="lettersPerWord"
+      type="number" 
+      formControlName="lettersPerWord" 
+      min="3" 
+      max="8"
+    />
+  </div>
+
+  <button type="submit">Save Settings And Start Game</button>
+</form>
