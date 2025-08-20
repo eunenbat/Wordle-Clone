@@ -40,6 +40,6 @@
     <div class="error">Number of letters has to be less than 8</div>
   }
 
-  <button type="submit" [disabled]="settingsForm.invalid">Save Settings</button>
+  <button type="submit" [disabled]="settingsForm.invalid" [disabled]="sameSettings()"> Save Settings</button>
 </form>
 <button (click)="startGame()" [disabled]="settingsForm.invalid">Start Game</button>

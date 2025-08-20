@@ -1,9 +1,32 @@
 .game-board {
     display: flex;
+    flex-direction: column;
     justify-content: center;
+    align-items: center;
 }
 
 .row {
     display: flex;
-    justify-content: space-between;
+    margin-bottom: 5px;
+}
+
+.tile {
+  height: 50px;
+  width: 50px;
+  border: 2px solid black;
+  font-size: 50px;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.tile.correct {
+  background-color: green;
+}
+
+.tile.present {
+  background-color: yellow;
+}
+
+.tile.incorrect {
+  background-color: grey;
 }
