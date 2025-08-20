@@ -1,3 +1,19 @@
 <div class="game">
-    {{selectedWord}}
+  {{ selectedWord }}
+  <p>Word Length: {{ wordLength }}</p>
+  <p>Form Array Length: {{ getRowsAsArray.length }}</p>
+  <div [formGroup]="gameBoard">
+    <div formArrayName="rows">
+      <!-- <div *ngFor="let row of gameBoard.controls; let r = index">
+        <input type="text" *ngFor="let input of row; let i = index">
+      </div> -->
+      <div *ngFor="let row of getRowsAsArray.controls; let r = index" [formGroupName]="r">
+             <input
+               *ngFor="let control of getRow(r).controls | keyvalue; let i = index"
+               type="text"
+               [formControlName]="control.key"
+               maxlength="1">
+           </div>
+    </div>
+  </div>
 </div>

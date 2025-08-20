@@ -35,17 +35,18 @@ export class StartPage{
   }
 
   onSubmit() {
-    this.settingService.saveSettings
-    console.log(this.settingsForm.value);
+    this.settingService.saveSettings(this.settingsForm.value)
     this.wordLength = this.settingsForm.value.lettersPerWord ?? 5;
-    this.getWord()
-    this.router.navigate(['game']);
+  }
+
+  startGame() {
+  this.getWord()
+  this.router.navigate(['game']);
   }
 
   getWord() {
     this.wordService.getWord(this.wordLength).subscribe(response => {
       this.selectedWord = response[0];
-      console.log(response)
       this.sendWord(this.selectedWord);
     })
   }

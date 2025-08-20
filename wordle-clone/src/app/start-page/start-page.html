@@ -32,5 +32,14 @@
     />
   </div>
 
-  <button type="submit">Save Settings And Start Game</button>
+  @if (settingsForm.get('lettersPerWord')?.errors?.['required']) {
+    <div class="error">Letters per word can not be left blank</div>
+  } @else if (settingsForm.get('lettersPerWord')?.errors?.['min']) {
+    <div class="error">Number of letters has to be greater than 2</div>
+  } @else if (settingsForm.get('lettersPerWord')?.errors?.['max']) {
+    <div class="error">Number of letters has to be less than 8</div>
+  }
+
+  <button type="submit" [disabled]="settingsForm.invalid">Save Settings</button>
 </form>
+<button (click)="startGame()" [disabled]="settingsForm.invalid">Start Game</button>
