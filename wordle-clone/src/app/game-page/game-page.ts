@@ -3,6 +3,9 @@ import { WordService } from '../word.service';
 import { CommonModule } from '@angular/common';
 import { FormGroup, FormControl, FormBuilder, FormArray, ReactiveFormsModule } from '@angular/forms';
 import { SettingsService } from '../settings.service';
+import { HttpClient } from '@angular/common/http';
+import { Observable, firstValueFrom } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-game-page',
@@ -15,24 +18,37 @@ export class GamePage implements OnInit {
   wordLength: number = 5;
   row: number = 0
   column: number = 0
+  validEnglishWords: Set<string> = new Set();
 
   // gameBoard: string[] = [];
   gameBoard: {letter: string, class: string}[][] = []
 
-  constructor(private wordService: WordService, private fb: FormBuilder, private settingService: SettingsService) {
+  constructor(private wordService: WordService, private settingService: SettingsService, private http: HttpClient, private router: Router) {
     this.wordLength = this.settingService.getSettings().lettersPerWord;
-    this.wordService.word$.subscribe((word: string) => {
-      console.log('Received:', word);
-      this.selectedWord = word;
-      this.wordLength = word.length;
-      this.setBoard(); // Set up the board when word is received
-      console.log(this.gameBoard)
-    });
+    this.setBoard(); // Set up the board when word is received    
+  };
 
-  }
+  
 
   ngOnInit() {
-    
+    // sets up the dictionary Set and also makes sure that the word retrieved from the dictionary is valid
+    this.http.get<{ [word: string]: number }>('assets/english-words.json').subscribe(data => {
+      this.validEnglishWords =  new Set(Object.keys(data).map(w => w.toUpperCase()));
+      this.getValidWord()
+    });
+  }
+
+  getValidWord() {
+    this.wordService.getWord(this.wordLength).subscribe(response => {
+      const word = response[0];
+      if (this.validateWord(word)) {
+        this.selectedWord = word;
+        console.log("Selected valid word:", this.selectedWord);
+      } else {
+        // Try again recursively
+        this.getValidWord();
+      }
+    });
   }
 
   
@@ -50,22 +66,38 @@ export class GamePage implements OnInit {
       this.column++
     }
     if (event.key === 'Enter') {
-      if (this.column === this.wordLength) {
+      // console.log(this.gameBoard[this.row])
+      const guess = this.gameBoard[this.row]
+        .map(tile => tile.letter)
+        .join('');
+      if (this.column === this.wordLength && this.validateWord(guess)) {
+        this.addColorToTiles()
         this.checkWin()
         this.column = 0
         this.row++
       }
     }
+    if (event.key ==='Backspace') {
+      if (this.column === 0) {
+      } else {
+        this.column--
+        this.gameBoard[this.row][this.column].letter = '' 
+      }
+    }
   }
 
   checkWin() {
+    // let currGuess = this.gameBoard[this.row].join('')
+    const guess = this.gameBoard[this.row]
+        .map(tile => tile.letter)
+        .join('');
     if (this.column !== this.wordLength) return
 
-    if (this.gameBoard[this.row].join('') === this.selectedWord) {
+    if (guess === this.selectedWord) {
       // what to do if they won (redirect to winning screen with leaderboard, need to pass the number of tries)
-    } else {
-      this.addColorToTiles()
+      this.router.navigate(['results']);
     }
+    
   }
 
   addColorToTiles() {
@@ -79,6 +111,11 @@ export class GamePage implements OnInit {
         tile.class = 'incorrect'
       }
     })
+  }
+
+  validateWord(guess: string): boolean {
+    // console.log("valid word?: ", this.validEnglishWords.has(guess.trim().toUpperCase()))
+    return this.validEnglishWords.has(guess.trim().toUpperCase());
   }
 }
 
