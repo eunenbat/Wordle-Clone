@@ -24,11 +24,9 @@ export class GamePage implements OnInit {
     this.wordService.word$.subscribe((word: string) => {
       console.log('Received:', word);
       this.selectedWord = word;
-      if (word) {
-        this.wordLength = word.length;
-        this.setBoard(); // Set up the board when word is received
-        console.log(this.gameBoard)
-      }
+      this.wordLength = word.length;
+      this.setBoard(); // Set up the board when word is received
+      console.log(this.gameBoard)
     });
 
   }
