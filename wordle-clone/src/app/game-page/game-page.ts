@@ -35,9 +35,6 @@ export class GamePage implements OnInit {
 
   ngOnInit() {
     this.setKeyboard();
-    // this.wordLength = this.selectedWord.length;
-
-    // this.setBoard()
     console.log(this.gameBoard)
     console.log(this.keyboard)
   }
@@ -58,7 +55,6 @@ export class GamePage implements OnInit {
       const row: { [key: string]: FormControl } = {};
       for (let c = 0; c < this.wordLength; c++) {
         row[`r${r}-c${c}`] = this.fb.control('')
-        // this.getRow(r).push(new FormControl(''));
       }
       this.getRowsAsArray.push(this.fb.group(row))
     }
