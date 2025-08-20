@@ -11,7 +11,6 @@ export class MusicService {
     this.audio.src = 'assets/background-music.mp3'
     this.audio.loop = true 
     this.audio.load()
-    this.audio.play()
   }
 
   setVolume(volumeSetting: number) {
