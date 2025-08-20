@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, HostListener, Input, OnInit } from '@angular/core';
 import { WordService } from '../word.service';
 import { CommonModule } from '@angular/common';
 import { FormGroup, FormControl, FormBuilder, FormArray, ReactiveFormsModule } from '@angular/forms';
@@ -12,15 +12,14 @@ import { SettingsService } from '../settings.service';
 })
 export class GamePage implements OnInit {
   selectedWord: string = '';
-  wordLength: number = 0;
-  keyboard: Record<string, boolean> = {};
+  wordLength: number = 5;
+  row: number = 0
+  column: number = 0
+
   // gameBoard: string[] = [];
-  gameBoard!: FormGroup;
+  gameBoard: {letter: string, class: string}[][] = []
 
   constructor(private wordService: WordService, private fb: FormBuilder, private settingService: SettingsService) {
-    this.gameBoard = this.fb.group({
-      rows: this.fb.array([])
-    })
     this.wordLength = this.settingService.getSettings().lettersPerWord;
     this.wordService.word$.subscribe((word: string) => {
       console.log('Received:', word);
@@ -28,39 +27,61 @@ export class GamePage implements OnInit {
       if (word) {
         this.wordLength = word.length;
         this.setBoard(); // Set up the board when word is received
+        console.log(this.gameBoard)
       }
     });
 
   }
 
   ngOnInit() {
-    this.setKeyboard();
-    console.log(this.gameBoard)
-    console.log(this.keyboard)
+    
   }
 
-  setKeyboard() {
-    for (let i = 0; i < 26; i++) {
-      const char = String.fromCharCode(97 + i); // 97 is ASCII for 'a'
-      this.keyboard[char] = false;
-    }
-  }
-
-  get getRowsAsArray(): FormArray {
-    return this.gameBoard.get('rows') as FormArray;
-  }
+  
 
   setBoard() {
-    for (let r = 0; r < 6; r++) {
-      const row: { [key: string]: FormControl } = {};
-      for (let c = 0; c < this.wordLength; c++) {
-        row[`r${r}-c${c}`] = this.fb.control('')
+    this.gameBoard = new Array(6).fill(null).map(_ => 
+      new Array(this.wordLength).fill(null).map(() => ({ letter: '', class: '' }))
+  )
+  }
+
+  @HostListener('window:keydown', ['$event'])
+  handleKeyDown(event: KeyboardEvent) {
+    if (/^[a-z]$/.test(event.key) && this.column < this.wordLength) {
+      this.gameBoard[this.row][this.column].letter = event.key
+      this.column++
+    }
+    if (event.key === 'Enter') {
+      if (this.column === this.wordLength) {
+        this.checkWin()
+        this.column = 0
+        this.row++
       }
-      this.getRowsAsArray.push(this.fb.group(row))
     }
   }
 
-  getRow(idx: number): FormGroup {
-    return this.getRowsAsArray.at(idx) as FormGroup;
+  checkWin() {
+    if (this.column !== this.wordLength) return
+
+    if (this.gameBoard[this.row].join('') === this.selectedWord) {
+      // what to do if they won (redirect to winning screen with leaderboard, need to pass the number of tries)
+    } else {
+      this.addColorToTiles()
+    }
+  }
+
+  addColorToTiles() {
+    let splitWord = this.selectedWord.split('')
+    this.gameBoard[this.row].forEach( (tile, index) => {
+      if (splitWord[index] == tile.letter) {
+        tile.class = 'correct'
+      } else if (splitWord.includes(tile.letter)) {
+        tile.class = 'present'
+      } else {
+        tile.class = 'incorrect'
+      }
+    })
   }
 }
+
+
