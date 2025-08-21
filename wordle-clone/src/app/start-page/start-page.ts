@@ -57,7 +57,6 @@ export class StartPage implements OnInit{
   }
 
   startGame() {
-    // this.musicService.play()
     this.router.navigate(['game']);
   }
 
@@ -70,6 +69,7 @@ export class StartPage implements OnInit{
   }
 
   showSettingsPage() {
+    // this.musicService.play()
     this.settingsPage = true
   }
 
