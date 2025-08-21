@@ -38,6 +38,11 @@ export class GamePage implements OnInit {
   showFailPopup: boolean = false
   settingsPage = false
 
+  audioWin: string = 'assets/game-win.wav'
+  audioLose: string = 'assets/game-lose.wav'
+  audioKeyPress: string = 'assets/keypress.wav'
+  audioStart: string = 'assets/game-start.wav'
+
   keyboard!: Record<string, KeyState>
   qwertyRows = ['QWERTYUIOP', 'ASDFGHJKL', 'ZXCVBNM'];
 
@@ -48,24 +53,27 @@ export class GamePage implements OnInit {
     this.wordLength = this.settingService.getSettings().lettersPerWord;
     this.setBoard(); // Set up the board when word is received
     this.createKeyboard();
+    this.musicService.playSound(this.audioStart)
   };
 
 
 
   ngOnInit() {
-    const wordList: string = 'assets/25k-popular.json'
+    const wordList: string = 'assets/en-words-cleaned-V2.json'
     // const wordList: string = 'assets/english-words.json'
     // sets up the dictionary Set and also makes sure that the word retrieved from the dictionary is valid
     this.http.get<{ [word: string]: number }>(wordList).subscribe(data => {
       this.validEnglishWords = new Set(Object.keys(data).map(w => w.toUpperCase()));
       this.getValidWord()
     });
+    
     // this.musicService.play()
   }
 
   getValidWord() {
     this.wordService.getWord(this.wordLength).subscribe(response => {
       const word = response[0];
+      // console.log(word)
       if (this.validateWord(word)) {
         this.selectedWord = word;
         console.log("Selected valid word:", this.selectedWord);
@@ -90,15 +98,17 @@ export class GamePage implements OnInit {
     // if (this.column >= this.wordLength) {
     //   this.column = this.wordLength - 1;
     // }
+    this.musicService.playSound(this.audioKeyPress)
     if (/^[a-z]$/.test(event.key) && this.column < this.wordLength) {
-      console.log(this.column)
+      // console.log(this.column)
       if (this.gameBoard[this.row][this.column].letter === '') {
         this.gameBoard[this.row][this.column].letter = event.key
         this.column++;
       }
-      console.log(this.column)
+      // console.log(this.column)
     }
     if (event.key === 'Enter') {
+      
       const guess = this.gameBoard[this.row]
         .map(tile => tile.letter)
         .join('');
@@ -107,8 +117,7 @@ export class GamePage implements OnInit {
         this.addColorToTiles()
         this.updateKeyboard(guess)
         this.checkWin()
-        this.column = 0
-        this.row++
+        
       }
       else {
         this.showPopup()
@@ -143,12 +152,17 @@ export class GamePage implements OnInit {
     if (guess === this.selectedWord) {
       this.openLeaderBoard()
       this.gameEndedWin = true
-      this.column = 100
-      this.row = 100
+      this.musicService.playSound(this.audioWin)
+      
+      this.row++
+      // this.column = this.wordLength-1
       return
     } else if (this.row >= 5) {
       this.handleGameFailed()
       return
+    } else {
+      this.column = 0
+      this.row++
     }
 
   }
@@ -167,6 +181,7 @@ export class GamePage implements OnInit {
   }
 
   validateWord(guess: string): boolean {
+    console.log(this.validEnglishWords.has('FUCKS'))
     return this.validEnglishWords.has(guess.trim().toUpperCase());
   }
 
@@ -196,6 +211,7 @@ export class GamePage implements OnInit {
   }
 
   handleGameFailed() {
+    this.musicService.playSound(this.audioLose)
     this.gameFailed = true;
     this.showFailPopup = true;
   }

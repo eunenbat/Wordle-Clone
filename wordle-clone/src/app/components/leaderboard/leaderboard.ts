@@ -13,6 +13,7 @@ export class LeaderBoard {
   @Input() show: boolean = false;
   @Input() numTries!: number;
   @Output() closeLeaderBoard: EventEmitter<boolean> = new EventEmitter<boolean>();
+  displayBottomPart: boolean = true;
 
   scores: Score[] = [];
   scoreForm = new FormGroup({
@@ -44,7 +45,7 @@ export class LeaderBoard {
       tries: this.numTries
       // tries: Number(this.scoreForm.value.tries),
     };
-
+    this.displayBottomPart = false
     this.lbService.addScore(newScore);
     this.scores = this.lbService.getScores();
     this.scoreForm.reset();

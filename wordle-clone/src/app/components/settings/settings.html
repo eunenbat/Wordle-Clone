@@ -2,7 +2,9 @@
   <h1 class="page-title">Settings</h1>
 
   <form [formGroup]="settingsForm" (ngSubmit)="onSubmit()" class="settings-form">
-    <img [src]="muteUnmuteImage()"/>
+    <div class="mute-container">
+      <img [src]="muteUnmuteImage()" (click)="toggleVolume()" class="mute-image"/>
+    </div>
     <div class="form-group">
       <label for="volume">Game Volume: {{ settingsForm.value.volume }}</label>
       <input id="volume" type="range" formControlName="volume" min="0" max="100" class="range-input"/>

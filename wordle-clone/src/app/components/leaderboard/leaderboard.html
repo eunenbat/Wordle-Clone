@@ -1,7 +1,7 @@
 <div class="modal" *ngIf="show" >
   <div class="modal-content">
     <span class="close" (click)="close()">&times;</span>
-    <h2>Leaderboard</h2>
+    <h2>Leaderboard (Top 10)</h2>
     <table>
       <tr>
         <th>#</th>
@@ -11,13 +11,16 @@
       <tr *ngFor="let score of scores; let i = index">
         <td>{{ i + 1 }}</td>
         <td>{{ score.name }}</td>
-        <td>{{ score.tries }}</td>
+        <td>{{ score.tries }}/6</td>
       </tr>
     </table>
-
-    <form [formGroup]="scoreForm" (ngSubmit)="addScore()" *ngIf="numTries > 0">
-      <input type="text" placeholder="Your name" formControlName="name">
-      <button type="submit" [disabled]="scoreForm.invalid">Add Score</button>
+    <br>
+    <form class="leader-bottom" [formGroup]="scoreForm" (ngSubmit)="addScore()" *ngIf="displayBottomPart">
+      <div class="score-input">
+        <input type="text" placeholder="Your name" formControlName="name">
+        <div id="your-score">Your score: {{numTries}}/6</div>
+      </div>
+      <button class="btn btn-primary" type="submit" [disabled]="scoreForm.invalid" >Add To Leaderboard</button>
     </form>
   </div>
 </div>

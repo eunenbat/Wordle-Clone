@@ -66,9 +66,17 @@ export class SettingsComponent implements OnInit {
 
   muteUnmuteImage() {
     if (this.settingsForm.value.volume > 0 ){
-      return "assets/mute-icon.png"
+      return "assets/icons8-mute-unmute-50.png"
     } else {
-      return "assets/unmute-icon.gif"
+      return "assets/mute-icon.png"
+    }
+  }
+
+  toggleVolume() {
+    if (this.settingsForm.value.volume > 0 ){
+      this.settingsForm.patchValue({volume: 0})
+    } else {
+      this.settingsForm.patchValue({volume: this.currentSettings.volume})
     }
   }
 }

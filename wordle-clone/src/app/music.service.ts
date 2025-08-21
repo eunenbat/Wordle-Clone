@@ -27,4 +27,10 @@ export class MusicService {
   play() {
     this.audio.play().catch(err => console.warn(err))
   }
+
+  playSound(audioFile: string) {
+    const soundEff = new Audio
+    soundEff.src = audioFile
+    soundEff.play()
+  }
 }

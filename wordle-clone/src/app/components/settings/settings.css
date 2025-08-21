@@ -93,3 +93,12 @@
 .link-btn:hover {
   text-decoration: underline;
 }
+
+.mute-image {
+  height: 30px;
+}
+
+.mute-container {
+  display: flex;
+  justify-content: end;
+}
