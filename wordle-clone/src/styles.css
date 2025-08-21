@@ -1,1 +1,51 @@
 /* You can add global styles to this file, and also import other style files */
+/* body {
+  font-family: system-ui, sans-serif;
+  background: #f9fafb;
+  color: #111827;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+}
+body.dark-mode {
+  background: #111827;
+  color: #f9fafb;
+}
+
+body.dark-mode .page-title {
+  color: #f9fafb;
+}
+
+body.dark-mode .settings-form {
+  background: #1f2937;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+}
+
+body.dark-mode label {
+  color: #d1d5db;
+}
+
+body.dark-mode .number-input,
+body.dark-mode .checkbox-input {
+  background: #374151;
+  border: 1px solid #4b5563;
+  color: #f9fafb;
+}
+
+body.dark-mode .number-input:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59,130,246,0.4);
+}
+
+body.dark-mode .error {
+  color: #f87171;
+}
+
+body.dark-mode .btn-primary {
+  background: #2563eb;
+}
+
+body.dark-mode .btn-secondary {
+  background: #059669;
+} */
+
