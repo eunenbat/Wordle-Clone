@@ -41,6 +41,7 @@ export class SettingsComponent implements OnInit {
     if (this.settingsForm.valid) {
       this.handleSave(this.settingsForm.value)
       this.save.emit(this.settingsForm.value);
+      this.close.emit()
     }
   }
 
