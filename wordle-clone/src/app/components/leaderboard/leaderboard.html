@@ -1,0 +1,23 @@
+<div class="modal" *ngIf="show" >
+  <div class="modal-content">
+    <span class="close" (click)="close()">&times;</span>
+    <h2>Leaderboard</h2>
+    <table>
+      <tr>
+        <th>#</th>
+        <th>Name</th>
+        <th>Tries</th>
+      </tr>
+      <tr *ngFor="let score of scores; let i = index">
+        <td>{{ i + 1 }}</td>
+        <td>{{ score.name }}</td>
+        <td>{{ score.tries }}</td>
+      </tr>
+    </table>
+
+    <form [formGroup]="scoreForm" (ngSubmit)="addScore()" *ngIf="numTries > 0">
+      <input type="text" placeholder="Your name" formControlName="name">
+      <button type="submit" [disabled]="scoreForm.invalid">Add Score</button>
+    </form>
+  </div>
+</div>
