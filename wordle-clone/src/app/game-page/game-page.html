@@ -20,4 +20,5 @@
             {{ c.letter }}
         </div>
     </div>
+    <button class="btn btn-primary" [hidden]="!gameEnded" (click)="reload()">Play Again</button>
 </div>

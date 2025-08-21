@@ -62,3 +62,20 @@
   50% { transform: scale(1.1); box-shadow: 0 0 10px rgba(0, 123, 255, 0.7); }
   100% { transform: scale(1); box-shadow: 0 0 0 rgba(0, 123, 255, 0.5); }
 }
+.btn {
+  padding: 0.75rem 1.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  color: white;
+}
+
+.btn-primary {
+  background: #3b82f6;
+}
+.btn-primary:hover {
+  background: #2563eb;
+}

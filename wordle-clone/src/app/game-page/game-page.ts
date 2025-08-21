@@ -7,6 +7,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, firstValueFrom } from 'rxjs';
 import { Router } from '@angular/router';
 import { LeaderBoard } from '../components/leaderboard/leaderboard';
+import { MusicService } from '../music.service';
 
 
 @Component({
@@ -16,6 +17,9 @@ import { LeaderBoard } from '../components/leaderboard/leaderboard';
   styleUrl: './game-page.css'
 })
 export class GamePage implements OnInit {
+  reload() {
+    window.location.reload()
+  }
   selectedWord: string = '';
   wordLength: number = 5;
   row: number = 0
@@ -27,21 +31,22 @@ export class GamePage implements OnInit {
   gameEnded: boolean = false
   // leaderboard: { name: string; score: number }[] = [];
 
-  gameBoard: {letter: string, class: string}[][] = []
+  gameBoard: { letter: string, class: string }[][] = []
 
-  constructor(private wordService: WordService, private settingService: SettingsService, private http: HttpClient, private router: Router) {
+  constructor(private wordService: WordService, private settingService: SettingsService, private http: HttpClient, private router: Router, private musicService: MusicService) {
     this.wordLength = this.settingService.getSettings().lettersPerWord;
     this.setBoard(); // Set up the board when word is received    
   };
 
-  
+
 
   ngOnInit() {
     // sets up the dictionary Set and also makes sure that the word retrieved from the dictionary is valid
     this.http.get<{ [word: string]: number }>('assets/english-words.json').subscribe(data => {
-      this.validEnglishWords =  new Set(Object.keys(data).map(w => w.toUpperCase()));
+      this.validEnglishWords = new Set(Object.keys(data).map(w => w.toUpperCase()));
       this.getValidWord()
     });
+    // this.musicService.play()
   }
 
   getValidWord() {
@@ -57,21 +62,20 @@ export class GamePage implements OnInit {
     });
   }
 
-  
+
 
   setBoard() {
-    this.gameBoard = new Array(6).fill(null).map(_ => 
+    this.gameBoard = new Array(6).fill(null).map(_ =>
       new Array(this.wordLength).fill(null).map(() => ({ letter: '', class: '' }))
-  )
+    )
   }
 
   @HostListener('window:keydown', ['$event'])
   handleKeyDown(event: KeyboardEvent) {
     if (this.gameEnded) return;
     if (/^[a-z]$/.test(event.key) && this.column < this.wordLength) {
-      this.gameBoard[this.row][this.column].letter = event.key
-      // this.column++
-      if (this.column < this.wordLength - 1) {
+      if (this.column <= this.wordLength - 1) {
+        this.gameBoard[this.row][this.column].letter = event.key
         this.column++;
       }
     }
@@ -80,7 +84,7 @@ export class GamePage implements OnInit {
       const guess = this.gameBoard[this.row]
         .map(tile => tile.letter)
         .join('');
-      if (this.column === (this.wordLength - 1) && this.validateWord(guess)) {
+      if (this.column === (this.wordLength) && this.validateWord(guess)) {
         this.addColorToTiles()
         this.checkWin()
         this.column = 0
@@ -90,12 +94,14 @@ export class GamePage implements OnInit {
         this.showPopup()
       }
     }
-    if (event.key ==='Backspace') {
-      if (this.column > 0) {
+    if (event.key === 'Backspace') {
+      if (this.column > 0 && this.column < this.wordLength) {
         this.gameBoard[this.row][this.column].letter = '';
         this.column--;
       } else if (this.column === 0) {
         this.gameBoard[this.row][this.column].letter = '';
+      } else if (this.column === this.wordLength) {
+        this.column--
       }
     }
   }
@@ -103,23 +109,22 @@ export class GamePage implements OnInit {
   checkWin() {
     // let currGuess = this.gameBoard[this.row].join('')
     const guess = this.gameBoard[this.row]
-        .map(tile => tile.letter)
-        .join('');
-    if (this.column !== (this.wordLength - 1)) return
+      .map(tile => tile.letter)
+      .join('');
+    if (this.column !== (this.wordLength)) return
 
     if (guess === this.selectedWord) {
-      // what to do if they won (redirect to winning screen with leaderboard, need to pass the number of tries)
-      // this.router.navigate(['results']);
       this.openLeaderBoard()
       this.gameEnded = true
-
+      this.column = 100
+      this.row = 100
     }
-    
+
   }
 
   addColorToTiles() {
     let splitWord = this.selectedWord.split('')
-    this.gameBoard[this.row].forEach( (tile, index) => {
+    this.gameBoard[this.row].forEach((tile, index) => {
       if (splitWord[index] == tile.letter) {
         tile.class = 'correct'
       } else if (splitWord.includes(tile.letter)) {
