@@ -6,10 +6,12 @@ import { SettingsService } from '../settings.service';
 import { HttpClient } from '@angular/common/http';
 import { Observable, firstValueFrom } from 'rxjs';
 import { Router } from '@angular/router';
+import { LeaderBoard } from '../components/leaderboard/leaderboard';
+
 
 @Component({
   selector: 'app-game-page',
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, LeaderBoard],
   templateUrl: './game-page.html',
   styleUrl: './game-page.css'
 })
@@ -19,8 +21,12 @@ export class GamePage implements OnInit {
   row: number = 0
   column: number = 0
   validEnglishWords: Set<string> = new Set();
+  isPopupVisible: boolean = false
+  isGuessWrong: boolean = false
+  showLeaderBoard: boolean = false
+  gameEnded: boolean = false
+  // leaderboard: { name: string; score: number }[] = [];
 
-  // gameBoard: string[] = [];
   gameBoard: {letter: string, class: string}[][] = []
 
   constructor(private wordService: WordService, private settingService: SettingsService, private http: HttpClient, private router: Router) {
@@ -61,27 +67,35 @@ export class GamePage implements OnInit {
 
   @HostListener('window:keydown', ['$event'])
   handleKeyDown(event: KeyboardEvent) {
+    if (this.gameEnded) return;
     if (/^[a-z]$/.test(event.key) && this.column < this.wordLength) {
       this.gameBoard[this.row][this.column].letter = event.key
-      this.column++
+      // this.column++
+      if (this.column < this.wordLength - 1) {
+        this.column++;
+      }
     }
     if (event.key === 'Enter') {
       // console.log(this.gameBoard[this.row])
       const guess = this.gameBoard[this.row]
         .map(tile => tile.letter)
         .join('');
-      if (this.column === this.wordLength && this.validateWord(guess)) {
+      if (this.column === (this.wordLength - 1) && this.validateWord(guess)) {
         this.addColorToTiles()
         this.checkWin()
         this.column = 0
         this.row++
       }
+      else {
+        this.showPopup()
+      }
     }
     if (event.key ==='Backspace') {
-      if (this.column === 0) {
-      } else {
-        this.column--
-        this.gameBoard[this.row][this.column].letter = '' 
+      if (this.column > 0) {
+        this.gameBoard[this.row][this.column].letter = '';
+        this.column--;
+      } else if (this.column === 0) {
+        this.gameBoard[this.row][this.column].letter = '';
       }
     }
   }
@@ -91,11 +105,14 @@ export class GamePage implements OnInit {
     const guess = this.gameBoard[this.row]
         .map(tile => tile.letter)
         .join('');
-    if (this.column !== this.wordLength) return
+    if (this.column !== (this.wordLength - 1)) return
 
     if (guess === this.selectedWord) {
       // what to do if they won (redirect to winning screen with leaderboard, need to pass the number of tries)
-      this.router.navigate(['results']);
+      // this.router.navigate(['results']);
+      this.openLeaderBoard()
+      this.gameEnded = true
+
     }
     
   }
@@ -116,6 +133,22 @@ export class GamePage implements OnInit {
   validateWord(guess: string): boolean {
     // console.log("valid word?: ", this.validEnglishWords.has(guess.trim().toUpperCase()))
     return this.validEnglishWords.has(guess.trim().toUpperCase());
+  }
+
+  showPopup() {
+    this.isPopupVisible = true;
+    this.isGuessWrong = true;
+    setTimeout(() => {
+      this.isPopupVisible = false;
+      this.isGuessWrong = false;
+    }, 1500);
+  }
+
+  openLeaderBoard() {
+    this.showLeaderBoard = true;
+  }
+  handleCloseLeaderBoard(closed: boolean) {
+    this.showLeaderBoard = !closed;
   }
 }
 

@@ -1,9 +1,23 @@
 <div class="game-board">
     {{ selectedWord }}
+    <button (click)="openLeaderBoard()">Show Leaderboard</button>
+    <app-leaderboard #leaderboard
+
+        [show]="showLeaderBoard"
+        [numTries]="row"
+
+        (closeLeaderBoard)="handleCloseLeaderBoard($event)"
+    ></app-leaderboard>
     <p>Word Length: {{ wordLength }}</p>
-    <div class="row" *ngFor="let row of gameBoard">
-        <div class="tile" *ngFor="let column of row" [ngClass]="column.class">
-            {{ column.letter }}
+    <div *ngIf="isPopupVisible" class="popup-box">
+      <p>Not a valid word!</p>
+    </div>
+    <div class="row" *ngFor="let r of gameBoard; let rIdx = index"
+        [class.wrong-guess]="rIdx === row && isGuessWrong">
+        <div class="tile" *ngFor="let c of r; let cIdx = index" 
+        [ngClass]="c.class"
+        [class.current-col]="cIdx === column && rIdx === row">
+            {{ c.letter }}
         </div>
     </div>
 </div>

@@ -1,45 +1,84 @@
-<h1>Settings</h1>
-<form [formGroup]="settingsForm" (ngSubmit)="onSubmit()" class="space-y-4 p-4">
-  <div>
-    <label for="volume">Game Volume: {{ settingsForm.value.volume }}</label>
-    <input 
-      id="volume"
-      type="range" 
-      formControlName="volume" 
-      min="0" 
-      max="100"
-    />
+<div [class.hidden]="!settingsPage" class="sidebar">
+  <h1 class="page-title">Settings</h1>
+  <form [formGroup]="settingsForm" (ngSubmit)="onSubmit()" class="settings-form">
+    <div class="form-group">
+      <label for="volume">Game Volume: {{ settingsForm.value.volume }}</label>
+      <input 
+        id="volume"
+        type="range" 
+        formControlName="volume" 
+        min="0" 
+        max="100"
+        class="range-input"
+      />
+    </div>
+
+    <div class="form-group inline">
+      <label for="darkMode">Light/Dark Mode:</label>
+      <input 
+        id="darkMode"
+        type="checkbox" 
+        formControlName="darkMode"
+        class="checkbox-input"
+      />
+      <span class="mode-label">{{ settingsForm.value.darkMode ? 'I said it was Coming Soon' : 'Coming Soon' }}</span>
+    </div>
+
+    <div class="form-group">
+      <label for="lettersPerWord">Letters per word:</label>
+      <input 
+        id="lettersPerWord"
+        type="number" 
+        formControlName="lettersPerWord" 
+        min="3" 
+        max="8"
+        class="number-input"
+      />
+      @if (settingsForm.get('lettersPerWord')?.errors?.['required']) {
+        <div class="error">Letters per word can not be left blank</div>
+      } @else if (settingsForm.get('lettersPerWord')?.errors?.['min']) {
+        <div class="error">Number of letters has to be greater than 2</div>
+      } @else if (settingsForm.get('lettersPerWord')?.errors?.['max']) {
+        <div class="error">Number of letters has to be less than 8</div>
+      }
+    </div>
+
+    <button 
+      type="submit" 
+      class="btn btn-primary" 
+      [disabled]="settingsForm.invalid || sameSettings()"
+    >
+      Save Settings
+    </button>
+    <button class="link-btn" (click)="hideSettingsPage()">Close</button>
+  </form>
+</div>
+
+<div class="home-container">
+  <h1 class="game-title">Better Wordle Clone</h1>
+  <p class="tagline">You know it, you love it, Play it here!</p>
+  <p>Current Word Length is {{currentSettings.lettersPerWord}}</p>
+
+  <div class="home-actions">
+    <button 
+      (click)="startGame()" 
+      class="btn btn-primary" 
+      [disabled]="settingsForm.invalid">
+      Start Game
+    </button>
+
+    <button 
+      class="btn btn-secondary" (click)="showSettingsPage()">
+      Settings
+    </button>
   </div>
 
-  <div>
-    <label for="darkMode">Light/Dark Mode:</label>
-    <input 
-      id="darkMode"
-      type="checkbox" 
-      formControlName="darkMode"
-    />
-    <span>{{ settingsForm.value.darkMode ? 'Dark' : 'Light' }}</span>
+  <div class="extras">
+    <a href="https://letmegooglethat.com/?q=How+to+play+Wordle"><button class="link-btn" >How to Play</button></a>
+    <button class="link-btn" (click)="openLeaderBoard()" >Leaderboard</button>
+    <app-leaderboard #leaderboard
+        [show]="showLeaderBoard"
+        (closeLeaderBoard)="handleCloseLeaderBoard($event)"
+    ></app-leaderboard>
   </div>
-
-  <div>
-    <label for="lettersPerWord">Letters per word:</label>
-    <input 
-      id="lettersPerWord"
-      type="number" 
-      formControlName="lettersPerWord" 
-      min="3" 
-      max="8"
-    />
-  </div>
-
-  @if (settingsForm.get('lettersPerWord')?.errors?.['required']) {
-    <div class="error">Letters per word can not be left blank</div>
-  } @else if (settingsForm.get('lettersPerWord')?.errors?.['min']) {
-    <div class="error">Number of letters has to be greater than 2</div>
-  } @else if (settingsForm.get('lettersPerWord')?.errors?.['max']) {
-    <div class="error">Number of letters has to be less than 8</div>
-  }
-
-  <button type="submit" [disabled]="settingsForm.invalid" [disabled]="sameSettings()"> Save Settings</button>
-</form>
-<button (click)="startGame()" [disabled]="settingsForm.invalid">Start Game</button>
+</div>
