@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core'
+import { SettingsService } from './settings.service'
 
 @Injectable({
   providedIn: 'root',
@@ -6,10 +7,11 @@ import { Injectable } from '@angular/core'
 export class MusicService {
   private audio: HTMLAudioElement
 
-  constructor() {
+  constructor(private settingsService: SettingsService) {
     this.audio = new Audio()
     this.audio.src = 'assets/background-music.mp3'
     this.audio.loop = true 
+    this.setVolume(settingsService.getSettings().volume)
     this.audio.load()
   }
 
