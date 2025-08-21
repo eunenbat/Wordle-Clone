@@ -66,7 +66,7 @@ export class GamePage implements OnInit {
       this.validEnglishWords = new Set(Object.keys(data).map(w => w.toUpperCase()));
       this.getValidWord()
     });
-    
+
     // this.musicService.play()
   }
 
@@ -95,29 +95,24 @@ export class GamePage implements OnInit {
   @HostListener('window:keydown', ['$event'])
   handleKeyDown(event: KeyboardEvent) {
     if (this.gameEndedWin || this.gameFailed) return;
-    // if (this.column >= this.wordLength) {
-    //   this.column = this.wordLength - 1;
-    // }
     this.musicService.playSound(this.audioKeyPress)
     if (/^[a-z]$/.test(event.key) && this.column < this.wordLength) {
-      // console.log(this.column)
       if (this.gameBoard[this.row][this.column].letter === '') {
         this.gameBoard[this.row][this.column].letter = event.key
         this.column++;
       }
-      // console.log(this.column)
     }
     if (event.key === 'Enter') {
-      
+
       const guess = this.gameBoard[this.row]
         .map(tile => tile.letter)
         .join('');
-  
+
       if (guess.length === (this.wordLength) && this.validateWord(guess)) {
         this.addColorToTiles()
         this.updateKeyboard(guess)
         this.checkWin()
-        
+
       }
       else {
         this.showPopup()
@@ -131,8 +126,8 @@ export class GamePage implements OnInit {
       if (this.gameBoard[this.row][this.column] === undefined || this.gameBoard[this.row][this.column].letter === '') {
         this.column--;
         this.gameBoard[this.row][this.column].letter = ''
-        
-      } else if (this.column >= this.wordLength-1) {
+
+      } else if (this.column >= this.wordLength - 1) {
         this.gameBoard[this.row][this.column].letter = ''
       } else {
         this.gameBoard[this.row][this.column].letter = ''
@@ -144,8 +139,8 @@ export class GamePage implements OnInit {
   checkWin() {
     const guess = this.gameBoard[this.row]
       .map(tile => tile.letter)
-      .join('');   
-    if (guess.length !== (this.wordLength)){ 
+      .join('');
+    if (guess.length !== (this.wordLength)) {
       return
     }
 
@@ -153,9 +148,7 @@ export class GamePage implements OnInit {
       this.openLeaderBoard()
       this.gameEndedWin = true
       this.musicService.playSound(this.audioWin)
-      
       this.row++
-      // this.column = this.wordLength-1
       return
     } else if (this.row >= 5) {
       this.handleGameFailed()
@@ -164,7 +157,6 @@ export class GamePage implements OnInit {
       this.column = 0
       this.row++
     }
-
   }
 
   addColorToTiles() {
@@ -231,7 +223,7 @@ export class GamePage implements OnInit {
     this.keyboard[key.toUpperCase()] = state
   }
 
-  updateKeyboard(guess : string) {
+  updateKeyboard(guess: string) {
     guess.split('').forEach((char, i) => {
       if (char.toUpperCase() == this.selectedWord[i].toUpperCase()) {
         this.changeKeyState('correct', char.toUpperCase())
