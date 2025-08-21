@@ -1,47 +1,30 @@
 <div class="game-board">
   <!-- {{ selectedWord }} -->
-  <button class="btn btn-primary" (click)="openLeaderBoard()">Show Leaderboard</button>
-  <app-leaderboard
-    #leaderboard
-    [show]="showLeaderBoard"
-    [numTries]="row"
-    (closeLeaderBoard)="handleCloseLeaderBoard($event)"
-  ></app-leaderboard>
-  <button (click)="showSettingsPage()" class="link-btn">Settings</button>
-  <app-settings
-    *ngIf="settingsPage"
-    (close)="handleCloseSettings()"
-    [currentSettings]="currentSettings"
-  >
-  </app-settings>
+  <div class="game-buttons">
+    <button class="btn btn-primary" (click)="navigateHome()">Home</button>
+    <button class="btn btn-secondary" (click)="openLeaderBoard()">Show Leaderboard</button>
+    <div class="link-container">
+      <button (click)="showSettingsPage()" class="link-btn">Settings</button>
+    </div>
+  </div>
+  <app-settings *ngIf="settingsPage" (close)="handleCloseSettings()" [currentSettings]="currentSettings"></app-settings>
+  <app-leaderboard #leaderboard [show]="showLeaderBoard" [numTries]="row"
+    (closeLeaderBoard)="handleCloseLeaderBoard($event)"></app-leaderboard>
   <br>
   <!-- <p>Word Length: {{ wordLength }}</p> -->
   <div *ngIf="isPopupVisible" class="popup-box">
     <p>Not a valid word!</p>
   </div>
-  <div
-    class="row"
-    *ngFor="let r of gameBoard; let rIdx = index"
-    [class.wrong-guess]="rIdx === row && isGuessWrong"
-  >
-    <div
-      class="tile"
-      *ngFor="let c of r; let cIdx = index"
-      [ngClass]="c.class"
-      [class.current-col]="cIdx === column && rIdx === row"
-    >
+  <div class="row" *ngFor="let r of gameBoard; let rIdx = index" [class.wrong-guess]="rIdx === row && isGuessWrong">
+    <div class="tile" *ngFor="let c of r; let cIdx = index" [ngClass]="c.class"
+      [class.current-col]="cIdx === column && rIdx === row">
       {{ c.letter }}
     </div>
   </div>
   <div class="keyboard">
     <div class="row" *ngFor="let row of qwertyRows">
-      <div
-        *ngFor="let l of row.split('')"
-        class="key"
-        [class.correct]="keyboard[l] === 'correct'"
-        [class.present]="keyboard[l] === 'present'"
-        [class.absent]="keyboard[l] === 'absent'"
-      >
+      <div *ngFor="let l of row.split('')" class="key" [class.correct]="keyboard[l] === 'correct'"
+        [class.present]="keyboard[l] === 'present'" [class.absent]="keyboard[l] === 'absent'">
         {{ l }}
       </div>
     </div>

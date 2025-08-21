@@ -110,10 +110,16 @@
   color: #3b82f6;
   font-weight: 600;
   cursor: pointer;
-  margin: 0 0.5rem;
 }
+
 .link-btn:hover {
   text-decoration: underline;
+}
+
+.link-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
 }
 
 .game-failed-popup {
@@ -206,4 +212,18 @@
 
 .key.absent {
   background-color: grey;
+}
+
+.game-buttons {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  margin-top: 2rem;
+}
+
+.btn-secondary {
+  background: #10b981;
+}
+.btn-secondary:hover {
+  background: #059669;
 }

@@ -235,4 +235,7 @@ export class GamePage implements OnInit {
     })
   }
 
+  navigateHome() {
+    this.router.navigate(['']);
+  }
 }
