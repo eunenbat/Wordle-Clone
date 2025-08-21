@@ -1,9 +1,5 @@
-<app-settings 
-  *ngIf="settingsPage"
-  [currentSettings]="currentSettings"
-  (save)="importNewSettings($event)"
-  (close)="handleCloseSettings()"
-></app-settings>
+<app-settings *ngIf="settingsPage" [currentSettings]="currentSettings" (save)="importNewSettings($event)"
+  (close)="handleCloseSettings()"></app-settings>
 
 <div class="home-container">
   <h1 class="game-title">Better Wordle Clone</h1>
@@ -11,25 +7,19 @@
   <p>Current Word Length is {{currentSettings.lettersPerWord}}</p>
 
   <div class="home-actions">
-    <button 
-      (click)="startGame()" 
-      class="btn btn-primary" 
-    >
+    <button (click)="startGame()" class="btn btn-primary">
       Start Game
     </button>
 
-    <button 
-      class="btn btn-secondary" (click)="showSettingsPage()">
+    <button class="btn btn-secondary" (click)="showSettingsPage()">
       Settings
     </button>
   </div>
 
   <div class="extras">
-    <a href="https://letmegooglethat.com/?q=How+to+play+Wordle"><button class="link-btn" >How to Play</button></a>
-    <button class="link-btn" (click)="openLeaderBoard()" >Leaderboard</button>
-    <app-leaderboard #leaderboard
-        [show]="showLeaderBoard"
-        (closeLeaderBoard)="handleCloseLeaderBoard($event)"
-    ></app-leaderboard>
+    <a href="https://letmegooglethat.com/?q=How+to+play+Wordle"><button class="link-btn">How to Play</button></a>
+    <button class="link-btn" (click)="openLeaderBoard()">Leaderboard</button>
+    <app-leaderboard #leaderboard [show]="showLeaderBoard"
+      (closeLeaderBoard)="handleCloseLeaderBoard($event)"></app-leaderboard>
   </div>
 </div>

@@ -13,9 +13,9 @@ import { SettingsService } from '../../settings.service';
   styleUrl: './settings.css'
 })
 export class SettingsComponent implements OnInit {
-  @Input() currentSettings!: GameSettings;          
-  @Output() save = new EventEmitter<GameSettings>(); 
-  @Output() close = new EventEmitter<void>();        
+  @Input() currentSettings!: GameSettings;
+  @Output() save = new EventEmitter<GameSettings>();
+  @Output() close = new EventEmitter<void>();
 
   settingsForm!: FormGroup;
 
@@ -23,7 +23,7 @@ export class SettingsComponent implements OnInit {
     this.setForm();
   }
 
-  constructor(private musicService: MusicService, private settingService: SettingsService){}
+  constructor(private musicService: MusicService, private settingService: SettingsService) { }
 
   private setForm() {
     this.settingsForm = new FormGroup({
@@ -49,7 +49,7 @@ export class SettingsComponent implements OnInit {
     this.musicService.setVolume(newSettings.volume);
     this.currentSettings = newSettings;
     this.toggleDarkMode();
-    
+
   }
 
   toggleDarkMode() {
@@ -59,8 +59,8 @@ export class SettingsComponent implements OnInit {
   }
 
   sameSettings() {
-    return this.currentSettings.darkMode === this.settingsForm.value.darkMode 
-      && this.currentSettings.volume === this.settingsForm.value.volume 
+    return this.currentSettings.darkMode === this.settingsForm.value.darkMode
+      && this.currentSettings.volume === this.settingsForm.value.volume
       && this.currentSettings.lettersPerWord === this.settingsForm.value.lettersPerWord;
   }
 }
