@@ -1,24 +1,63 @@
 <div class="game-board">
-    {{ selectedWord }}
-    <button (click)="openLeaderBoard()">Show Leaderboard</button>
-    <app-leaderboard #leaderboard
-
-        [show]="showLeaderBoard"
-        [numTries]="row"
-
-        (closeLeaderBoard)="handleCloseLeaderBoard($event)"
-    ></app-leaderboard>
-    <p>Word Length: {{ wordLength }}</p>
-    <div *ngIf="isPopupVisible" class="popup-box">
-      <p>Not a valid word!</p>
+  <!-- {{ selectedWord }} -->
+  <button class="btn btn-primary" (click)="openLeaderBoard()">Show Leaderboard</button>
+  <app-leaderboard
+    #leaderboard
+    [show]="showLeaderBoard"
+    [numTries]="row"
+    (closeLeaderBoard)="handleCloseLeaderBoard($event)"
+  ></app-leaderboard>
+  <button (click)="showSettingsPage()" class="link-btn">Settings</button>
+  <app-settings
+    *ngIf="settingsPage"
+    (close)="handleCloseSettings()"
+    [currentSettings]="currentSettings"
+  >
+  </app-settings>
+  <p>Word Length: {{ wordLength }}</p>
+  <div *ngIf="isPopupVisible" class="popup-box">
+    <p>Not a valid word!</p>
+  </div>
+  <div
+    class="row"
+    *ngFor="let r of gameBoard; let rIdx = index"
+    [class.wrong-guess]="rIdx === row && isGuessWrong"
+  >
+    <div
+      class="tile"
+      *ngFor="let c of r; let cIdx = index"
+      [ngClass]="c.class"
+      [class.current-col]="cIdx === column && rIdx === row"
+    >
+      {{ c.letter }}
     </div>
-    <div class="row" *ngFor="let r of gameBoard; let rIdx = index"
-        [class.wrong-guess]="rIdx === row && isGuessWrong">
-        <div class="tile" *ngFor="let c of r; let cIdx = index" 
-        [ngClass]="c.class"
-        [class.current-col]="cIdx === column && rIdx === row">
-            {{ c.letter }}
-        </div>
+  </div>
+  <div class="keyboard">
+    <div class="row" *ngFor="let row of qwertyRows">
+      <div
+        *ngFor="let l of row.split('')"
+        class="key"
+        [class.correct]="keyboard[l] === 'correct'"
+        [class.present]="keyboard[l] === 'present'"
+        [class.absent]="keyboard[l] === 'absent'"
+      >
+        {{ l }}
+      </div>
     </div>
-    <button class="btn btn-primary" [hidden]="!gameEnded" (click)="reload()">Play Again</button>
+  </div>
+  <br />
+  <button class="btn btn-primary" [hidden]="!gameEndedWin" (click)="reload()">Play Again</button>
+  <button class="btn btn-primary" *ngIf="gameFailed" (click)="reload()">Try Again</button>
+
+  <div class="game-failed-popup" *ngIf="showFailPopup">
+    <div class="popup-content">
+      <span class="close" (click)="closeFailPopup()">&times;</span>
+      <h2>Game Over!</h2>
+      <h2>
+        The word was: <span id="selected-word">{{ selectedWord }}</span>
+      </h2>
+      <br />
+      <button class="btn btn-primary" (click)="reload()">Try Again</button>
+    </div>
+  </div>
 </div>

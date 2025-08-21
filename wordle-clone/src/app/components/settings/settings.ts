@@ -63,4 +63,12 @@ export class SettingsComponent implements OnInit {
       && this.currentSettings.volume === this.settingsForm.value.volume
       && this.currentSettings.lettersPerWord === this.settingsForm.value.lettersPerWord;
   }
+
+  muteUnmuteImage() {
+    if (this.settingsForm.value.volume > 0 ){
+      return "assets/mute-icon.png"
+    } else {
+      return "assets/unmute-icon.gif"
+    }
+  }
 }

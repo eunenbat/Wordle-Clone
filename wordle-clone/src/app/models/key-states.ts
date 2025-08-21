@@ -1,0 +1,1 @@
+export type KeyState = 'unused' | 'present' | 'correct' | 'absent';

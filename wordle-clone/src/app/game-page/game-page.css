@@ -46,7 +46,17 @@
 }
 
 .row.wrong-guess {
-  background-color: red;
+  background-color: rgb(239, 90, 73);
+  animation: shake 0.5s ease-in-out;
+}
+
+@keyframes shake {
+  0% { transform: translateX(0); }
+  20% { transform: translateX(-5px); }
+  40% { transform: translateX(5px); }
+  60% { transform: translateX(-3px); }
+  80% { transform: translateX(3px); }
+  100% { transform: translateX(0); }
 }
 
 .tile.current-col {
@@ -62,6 +72,20 @@
   50% { transform: scale(1.1); box-shadow: 0 0 10px rgba(0, 123, 255, 0.7); }
   100% { transform: scale(1); box-shadow: 0 0 0 rgba(0, 123, 255, 0.5); }
 }
+
+.row-animation {
+ animation: pulse 1.5s infinite;
+}
+
+@keyframes blink {
+  0%, 100% {
+    background-color: transparent;
+  }
+  50% {
+    background-color: rgba(255, 255, 0, 0.3);
+  }
+}
+
 .btn {
   padding: 0.75rem 1.5rem;
   font-size: 1.1rem;
@@ -78,4 +102,108 @@
 }
 .btn-primary:hover {
   background: #2563eb;
+}
+
+.link-btn {
+  background: none;
+  border: none;
+  color: #3b82f6;
+  font-weight: 600;
+  cursor: pointer;
+  margin: 0 0.5rem;
+}
+.link-btn:hover {
+  text-decoration: underline;
+}
+
+.game-failed-popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+
+  /* position: fixed;
+  top: 20%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  transform: translate(-50%, -50%);
+  padding: 5px 20px;
+  border-radius: 5px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  z-index: 1000; */
+
+
+  /* position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease-out; */
+}
+
+.popup-content {
+  /* display: flex;
+  flex-direction: column;
+  justify-content: space-evenly; */
+  text-align: center;
+  background-color: white;
+  border-radius: 12px;
+  padding: 2rem;
+  text-align: center;
+  width: 90%;
+  max-width: 320px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  animation: popupScale 0.3s ease-out;
+}
+
+#selected-word {
+  color: rgb(13, 131, 13);
+}
+
+.close {
+  float: right;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.keyboard {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.key {
+  font-size: large;
+  border: 1px solid;
+  border-radius: 25%;
+  padding: 5px;
+  margin: 1px;
+  min-height: 1em;
+  min-width: 1em;
+  text-align: center;
+}
+
+.key.correct {
+  background-color: green;
+}
+
+.key.present {
+  background-color: yellow;
+}
+
+.key.absent {
+  background-color: grey;
 }
