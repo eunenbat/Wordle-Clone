@@ -8,7 +8,7 @@
   display: flex;
 }
 .settings-form {
-  background: white;
+  background: #DED3C4;
   padding: 2rem;
   border-radius: 0.75rem;
   box-shadow: 0 4px 10px rgba(0,0,0,0.05);
@@ -61,7 +61,7 @@
   top: 0;
   right: 0;
   border-left: 2px solid #555;
-  background: white;
+  background: #DED3C4;
   display: flex;
   flex-direction: column;
   align-items: center;
