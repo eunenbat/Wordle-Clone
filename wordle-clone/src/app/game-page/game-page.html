@@ -4,7 +4,7 @@
     <button class="btn btn-primary" (click)="navigateHome()">Home</button>
     <button class="btn btn-secondary" (click)="openLeaderBoard()">Show Leaderboard</button>
     <div class="link-container">
-      <button (click)="showSettingsPage()" class="link-btn">Settings</button>
+      <button (click)="showSettingsPage()" class="btn btn-primary">Settings</button>
     </div>
   </div>
   <app-settings *ngIf="settingsPage" (close)="handleCloseSettings()" [currentSettings]="currentSettings"></app-settings>

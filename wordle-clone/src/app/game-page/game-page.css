@@ -1,8 +1,25 @@
+/* body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: #DED3C4;
+  background-size: cover;
+  height: 100vh;
+  width: 100vw;
+} */
+
+
 .game-board {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+
+    /* margin: 0;
+    padding: 0;
+    background-size: cover;
+    min-height: 100vh;
+    width: 100vw; */
 }
 
 .row {
